@@ -1,7 +1,8 @@
-var w = 400,
-    h = 400;
+function pyramidBuilder(data, height, width){
+var w = width,
+    h = height;
 var margin = {
-        top: 20,
+        top: 50,
         right: 10,
         bottom: 20,
         left: 10,
@@ -11,30 +12,12 @@ var margin = {
     leftBegin = sectorWidth,
     rightBegin = w - sectorWidth;
 
-var yAxisLeft = d3.axisRight()
-    .scale(yScale)
-    .tickSize(4, 0)
-    .tickPadding(margin.middle - 4);
-
-var yAxisRight = d3.axisLeft()
-    .scale(yScale)
-    .tickSize(4, 0)
-    .tickFormat('');
-
     // string concat for translate
     function translation(x,y) {
       return 'translate(' + x + ',' + y + ')';
     }
 
-    var exampleData = [{ group: '0-9', male: 10, female: 12 }, { group: '10-19',
-    male: 14, female: 15 }, { group: '20-29', male: 15, female: 18 }, { group:
-      '30-39', male: 18, female: 18 }, { group: '40-49', male: 21, female: 22 }, {
-        group: '50-59', male: 19, female: 24 }, { group: '60-69', male: 15, female: 14 }, {
-          group: '70-79', male: 8, female: 10 }, { group: '80-89', male: 4, female: 5 }, {
-            group: '90-99', male: 2, female: 3 }, { group: '100-109', male: 1, female: 1 }, ];
-
-
-var totalPopulation = d3.sum(exampleData, function(d) {
+var totalPopulation = d3.sum(data, function(d) {
         return d.male + d.female;
     }),
     percentage = function(d) {
@@ -48,11 +31,11 @@ var pyramid = d3.select('#pyramid').append('svg')
     .attr('class', 'inner-region')
     .attr('transform', translation(margin.left,margin.top));
 
-    // find the maximum data value on either side
+    // find the maximum data value for whole dataset
     //  since this will be shared by both of the x-axes
     var maxValue = Math.max(
-      d3.max(exampleData, function(d) { return percentage(d.male); }),
-      d3.max(exampleData, function(d) { return percentage(d.female); })
+      d3.max(data, function(d) { return percentage(d.male); }),
+      d3.max(data, function(d) { return percentage(d.female); })
     );
 
     // SET UP SCALES
@@ -73,7 +56,7 @@ var pyramid = d3.select('#pyramid').append('svg')
       .range([0, sectorWidth]);
 
     var yScale = d3.scaleBand()
-      .domain(exampleData.map(function(d) { return d.group; }))
+      .domain(data.map(function(d) { return d.group; }))
       .range([h,0], 0.1);
 
 
@@ -129,19 +112,20 @@ var pyramid = d3.select('#pyramid').append('svg')
 
     // DRAW BARS
     leftBarGroup.selectAll('.bar.left')
-      .data(exampleData)
+      .data(data)
       .enter().append('rect')
         .attr('class', 'bar left')
         .attr('x', 0)
         .attr('y', function(d) { return yScale(d.group) + margin.middle/4; })
         .attr('width', function(d) { return xScale(percentage(d.male)); })
-        .attr('height', (yScale.range()[0]/exampleData.length) - margin.middle/2);
+        .attr('height', (yScale.range()[0]/data.length) - margin.middle/2);
 
     rightBarGroup.selectAll('.bar.right')
-      .data(exampleData)
+      .data(data)
       .enter().append('rect')
         .attr('class', 'bar right')
         .attr('x', 0)
         .attr('y', function(d) { return yScale(d.group) + margin.middle/4; })
         .attr('width', function(d) { return xScale(percentage(d.female)); })
-        .attr('height', (yScale.range()[0]/exampleData.length) - margin.middle/2);
+        .attr('height', (yScale.range()[0]/data.length) - margin.middle/2);
+}
