@@ -1,0 +1,27 @@
+body {
+  margin: 30px;
+}
+svg {
+  border: 1px solid #ccc;
+}
+
+.axis line,
+.axis path {
+  shape-rendering: crispEdges;
+  fill: transparent;
+  stroke: #555;
+}
+.axis text {
+  font-size: 11px;
+}
+
+
+.bar {
+  fill-opacity: 0.5;
+}
+.bar.left {
+  fill: steelblue;
+}
+.bar.right {
+  fill: firebrick;
+}
