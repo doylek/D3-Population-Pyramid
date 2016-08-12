@@ -1,4 +1,4 @@
-function pyramidBuilder(data, height, width){
+function pyramidBuilder(data, target, height, width){
 var w = width,
     h = height;
 var margin = {
@@ -24,7 +24,7 @@ var totalPopulation = d3.sum(data, function(d) {
         return d / totalPopulation;
     };
 
-var pyramid = d3.select('#pyramid').append('svg')
+var pyramid = d3.select(target).append('svg')
     .attr('width', margin.left + w + margin.right)
     .attr('height', margin.bottom + h + margin.top)
     .append('g')

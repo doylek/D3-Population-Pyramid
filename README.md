@@ -15,6 +15,6 @@ And include something like this in your body:
         group: '70-79', male: 8, female: 10 }, { group: '80-89', male: 4, female: 5 }, {
           group: '90+', male: 2, female: 3 }];
 
-  pyramidBuilder(exampleData, 400, 500);
-  </script>
+  pyramidBuilder(exampleData, '#pyramid', 400, 500);
+</script>
   ```
