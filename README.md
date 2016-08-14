@@ -1,5 +1,5 @@
 # D3-Population-Pyramid
-D3 Population Pyramid in D3 v4. You'll need only popPyramid.js for your own implementation. The easiest use is to include this in your header:
+D3 Population Pyramid in D3 v4. You'll need only popPyramid.js and D3 for your own implementation. The easiest use is to include this in your header:
 
 `  <script src="popPyramid.js"></script>`
 
@@ -18,3 +18,7 @@ And include something like this in your body:
   pyramidBuilder(exampleData, '#pyramid', 400, 500);
 </script>
   ```
+
+The took looks something like this:
+
+![alt text](/doylek/D3-Population-Pyramid/screenshot/screenshot.png "example screenshot")
