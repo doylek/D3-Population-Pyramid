@@ -19,6 +19,6 @@ And include something like this in your body:
 </script>
   ```
 
-The took looks something like this:
+The chart (with default css) looks something like this:
 
 ![alt text](https://raw.github.com/doylek/D3-Population-Pyramid/screenshot/screenshot.png "example screenshot")
