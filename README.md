@@ -21,4 +21,4 @@ And include something like this in your body:
 
 The took looks something like this:
 
-![alt text](raw.github.com/doylek/D3-Population-Pyramid/screenshot/screenshot.png "example screenshot")
+![alt text](https://raw.github.com/doylek/D3-Population-Pyramid/screenshot/screenshot.png "example screenshot")
