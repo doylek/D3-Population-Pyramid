@@ -24,10 +24,43 @@ var totalPopulation = d3.sum(data, function(d) {
         return d / totalPopulation;
     };
 
-var pyramid = d3.select(target).append('svg')
+var region = d3.select(target).append('svg')
     .attr('width', margin.left + w + margin.right)
-    .attr('height', margin.bottom + h + margin.top)
-    .append('g')
+    .attr('height', margin.bottom + h + margin.top);
+
+
+var legend = region.append('g')
+      .attr('class','legend');
+
+    legend.append('rect')
+      .attr('class','bar left')
+      .attr('x', (w/2) - (margin.middle*3) )
+      .attr('y',12)
+      .attr('width',12)
+      .attr('height',12);
+
+    legend.append('text')
+      .attr('fill','#000')
+      .attr('x', (w/2) - (margin.middle*2))
+      .attr('y',18)
+      .attr('dy','0.32em')
+      .text('Males');
+
+    legend.append('rect')
+      .attr('class','bar right')
+      .attr('x', (w/2) + (margin.middle*2) )
+      .attr('y',12)
+      .attr('width',12)
+      .attr('height',12);
+
+    legend.append('text')
+      .attr('fill','#000')
+      .attr('x', (w/2) + (margin.middle*3) )
+      .attr('y',18)
+      .attr('dy','0.32em')
+      .text('Females');
+
+var pyramid = region.append('g')
     .attr('class', 'inner-region')
     .attr('transform', translation(margin.left,margin.top));
 

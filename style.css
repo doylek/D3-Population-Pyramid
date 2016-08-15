@@ -17,8 +17,14 @@ body {
   fill-opacity: 0.5;
 }
 .bar.left {
-  fill: steelblue;
+  fill: #6c9dc6;
+}
+.bar.left:hover {
+  fill: #9fcff9;
 }
 .bar.right {
-  fill: firebrick;
+  fill: #de5454;
+}
+.bar.right:hover {
+  fill: #ff8787;
 }
