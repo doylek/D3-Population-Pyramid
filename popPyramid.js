@@ -1,4 +1,9 @@
 function pyramidBuilder(data, target, height, width){
+
+function prettyFormat(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 var w = width,
     h = height;
 var margin = {
@@ -59,6 +64,10 @@ var legend = region.append('g')
       .attr('y',18)
       .attr('dy','0.32em')
       .text('Females');
+
+var tooltipDiv = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
 
 var pyramid = region.append('g')
     .attr('class', 'inner-region')
@@ -151,7 +160,21 @@ var pyramid = region.append('g')
         .attr('x', 0)
         .attr('y', function(d) { return yScale(d.group) + margin.middle/4; })
         .attr('width', function(d) { return xScale(percentage(d.male)); })
-        .attr('height', (yScale.range()[0]/data.length) - margin.middle/2);
+        .attr('height', (yScale.range()[0]/data.length) - margin.middle/2)
+        .on("mouseover", function(d) {
+            tooltipDiv.transition()
+                .duration(200)
+                .style("opacity", 0.9);
+            tooltipDiv.html("Males: " + prettyFormat(d.male) +
+                            "<br />" + (Math.round(percentage(d.male) *1000) /10) + "% of population")
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+            })
+        .on("mouseout", function(d) {
+            tooltipDiv.transition()
+                .duration(500)
+                .style("opacity", 0);
+        });
 
     rightBarGroup.selectAll('.bar.right')
       .data(data)
@@ -160,5 +183,19 @@ var pyramid = region.append('g')
         .attr('x', 0)
         .attr('y', function(d) { return yScale(d.group) + margin.middle/4; })
         .attr('width', function(d) { return xScale(percentage(d.female)); })
-        .attr('height', (yScale.range()[0]/data.length) - margin.middle/2);
+        .attr('height', (yScale.range()[0]/data.length) - margin.middle/2)
+        .on("mouseover", function(d) {
+            tooltipDiv.transition()
+                .duration(200)
+                .style("opacity", 0.9);
+            tooltipDiv.html("Females: " + prettyFormat(d.female) +
+                            "<br />" + (Math.round(percentage(d.female) *1000) /10) + "% of population")
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+            })
+        .on("mouseout", function(d) {
+            tooltipDiv.transition()
+                .duration(500)
+                .style("opacity", 0);
+        });
 }

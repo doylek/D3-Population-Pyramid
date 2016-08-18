@@ -2,6 +2,7 @@ body {
   margin: 30px;
 }
 
+/*axis styling*/
 .axis line,
 .axis path {
   shape-rendering: crispEdges;
@@ -12,7 +13,7 @@ body {
   font-size: 11px;
 }
 
-
+/*bar styling*/
 .bar {
   fill-opacity: 0.5;
 }
@@ -27,4 +28,15 @@ body {
 }
 .bar.right:hover {
   fill: #ff8787;
+}
+
+/*tooltips*/
+.tooltip {
+  position: absolute;
+  line-height: 1.1em;
+  padding: 10px;
+  margin: 3px;
+  background: #eee;
+  pointer-events: none;
+  border-radius: 6px;
 }
