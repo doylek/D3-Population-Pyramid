@@ -1,8 +1,4 @@
-function pyramidBuilder(data, target, height, width){
-
-function prettyFormat(x) {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
+function pyramidBuilder(data, target, height, width, style){
 
 var w = width,
     h = height;
@@ -17,10 +13,11 @@ var margin = {
     leftBegin = sectorWidth,
     rightBegin = w - sectorWidth;
 
-    // string concat for translate
-    function translation(x,y) {
-      return 'translate(' + x + ',' + y + ')';
-    }
+var style = {
+  leftBarColor: typeof leftBarColor === 'undefined' ? '6c9dc6' : leftBarColor,
+  rightBarColor: typeof rightBarColor === 'undefined' ? 'de5454' : rightBarColor,
+  toolTipBG: typeof toolTipBG === 'undefined' ? 'fefefe' : toolTipBG
+}
 
 var totalPopulation = d3.sum(data, function(d) {
         return d.male + d.female;
@@ -28,6 +25,16 @@ var totalPopulation = d3.sum(data, function(d) {
     percentage = function(d) {
         return d / totalPopulation;
     };
+
+var styleSection = d3.select(target).append('style')
+    .text('.axis line,axis path {shape-rendering: crispEdges;fill: transparent;stroke: #555;} \
+    .axis text {font-size: 11px;} \
+    .bar {fill-opacity: 0.5;} \
+    .bar.left {fill: #'+style.leftBarColor+';} \
+    .bar.left:hover {fill: #' + colorTransform(style.leftBarColor, '333333') + ';} \
+    .bar.right {fill: #'+style.rightBarColor+';} \
+    .bar.right:hover {fill: #' + colorTransform(style.rightBarColor, '333333') + ';} \
+    .tooltip {position: absolute;line-height: 1.1em;padding: 7px; margin: 3px;background: #'+style.toolTipBG+';pointer-events: none;border-radius: 6px;}')
 
 var region = d3.select(target).append('svg')
     .attr('width', margin.left + w + margin.right)
@@ -165,8 +172,9 @@ var pyramid = region.append('g')
             tooltipDiv.transition()
                 .duration(200)
                 .style("opacity", 0.9);
-            tooltipDiv.html("Males: " + prettyFormat(d.male) +
-                            "<br />" + (Math.round(percentage(d.male) *1000) /10) + "% of population")
+            tooltipDiv.html("<strong>Males Age " + d.group + "</strong>" +
+                            "<br />  Population: " + prettyFormat(d.male) +
+                            "<br />" + (Math.round(percentage(d.male) *1000) /10) + "% of Total")
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");
             })
@@ -188,8 +196,9 @@ var pyramid = region.append('g')
             tooltipDiv.transition()
                 .duration(200)
                 .style("opacity", 0.9);
-            tooltipDiv.html("Females: " + prettyFormat(d.female) +
-                            "<br />" + (Math.round(percentage(d.female) *1000) /10) + "% of population")
+            tooltipDiv.html("<strong> Females Age " + d.group + "</strong>" +
+                            "<br />  Population: " + prettyFormat(d.male) +
+                            "<br />" + (Math.round(percentage(d.male) *1000) /10) + "% of Total")
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");
             })
@@ -198,4 +207,35 @@ var pyramid = region.append('g')
                 .duration(500)
                 .style("opacity", 0);
         });
+
+        /* HELPER FUNCTIONS */
+
+        // string concat for translate
+        function translation(x,y) {
+          return 'translate(' + x + ',' + y + ')';
+        }
+
+        // numbers with commas
+        function prettyFormat(x) {
+          return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        // lighten colors
+        function colorTransform(c1, c2) {
+          var origHex = {r: c1.substring(0,2), g: c1.substring(2,4), b: c1.substring(4,6)},
+              transhex = {r: c2.substring(0,2), g: c2.substring(2,4), b: c2.substring(4,6)},
+              newHex = {r: undefined, g: undefined, b: undefined};
+          function transform(d,e) {
+            var d = parseInt(d, 16),
+                e = parseInt(e, 16),
+                f = d + e;
+                if(f > 255) {f = 255}
+                return f.toString(16)
+          }
+          newHex.r = transform(origHex.r,transhex.r)
+          newHex.g = transform(origHex.g,transhex.g)
+          newHex.b = transform(origHex.b,transhex.b)
+          return newHex.r + newHex.g + newHex.b;
+          }
+
 }
