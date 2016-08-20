@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>D3 Population Pyramid</title>
     <link rel="stylesheet" href="style.css">
-    <script src="d3/d3.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="popPyramid.min.js"></script>
 </head>
 
@@ -27,12 +27,7 @@
         {age:"60-69",male:15,female:14},{age:"70-79",male:8,female:10},
         {age:"80-89",male:4,female:5},{age:"90+",male:2,female:3}];
 
-        pyramidBuilder(exampleData, '#pyramid', 400, 500, {
-            leftBarColor: '#00ffaa',
-            rightBarColor: '#ffaa00',
-            tooltipBG: '#333',
-            tooltipColor: 'white'
-        });
+        pyramidBuilder(exampleData, '#pyramid', 400, 500);
     </script>
 </body>
 
