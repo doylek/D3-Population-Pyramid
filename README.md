@@ -1,7 +1,7 @@
 # D3-Population-Pyramid
-D3 Population Pyramid in D3 v4. You'll need only popPyramid.js and D3 for your own implementation. The easiest use is to include this in your header:
+Interactive D3 Population Pyramid in D3 v4. You'll need only popPyramid.min.js and D3 for your own implementation. The easiest use is to include this in your header:
 
-`  <script src="popPyramid.js"></script>`
+`  <script src="popPyramid.min.js"></script>`
 
 And include something like this in your body:
 
@@ -19,6 +19,7 @@ And include something like this in your body:
 </script>
   ```
 
+## What's it look like?
 The chart (with default css) looks something like this:
 
 ![alt text](https://raw.github.com/doylek/D3-Population-Pyramid/screenshot/screenshot.png "example screenshot")
