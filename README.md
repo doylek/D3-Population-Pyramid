@@ -36,4 +36,4 @@ The chart (with default css) looks something like this:
 | style.leftBarColor | string (hex) | '#6c9dc6' | Y | Input color will be automatically lightened for :hover css |
 | style.rightBarColor | string (hex) | '#de5454' | Y  | Input color will be automatically lightened for :hover css|
 | style.tooltipBG |   string (hex) | '#fefefe' | Y  | Uses CSS background property, so you could use more than just a color value. |
-| style.tooltipColor |   string (hex) | 'black' | Y  |   &nbsp;     |
+| style.tooltipColor |   string (hex) | 'black' | Y  |  Controls CSS color property for tooltip  |
