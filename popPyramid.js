@@ -1,7 +1,7 @@
 function pyramidBuilder(data, target, height, width, style) {
 
-    var w = width,
-        h = height;
+    var w = typeof width === 'undefined' ? 400  : width,
+        h = typeof height === 'undefined' ? 400  : height;
     var margin = {
             top: 50,
             right: 10,
@@ -14,9 +14,10 @@ function pyramidBuilder(data, target, height, width, style) {
         rightBegin = w - sectorWidth;
 
     var style = {
-        leftBarColor: typeof leftBarColor === 'undefined' ? '6c9dc6' : leftBarColor,
-        rightBarColor: typeof rightBarColor === 'undefined' ? 'de5454' : rightBarColor,
-        toolTipBG: typeof toolTipBG === 'undefined' ? 'fefefe' : toolTipBG
+        leftBarColor: typeof style.leftBarColor === 'undefined' ? '#6c9dc6' : style.leftBarColor,
+        rightBarColor: typeof style.rightBarColor === 'undefined' ? '#de5454' : style.rightBarColor,
+        tooltipBG: typeof style.tooltipBG === 'undefined' ? '#fefefe' : style.tooltipBG,
+        tooltipColor: typeof style.tooltipColor === 'undefined' ? 'black' : style.tooltipColor
     }
 
     var totalPopulation = d3.sum(data, function(d) {
@@ -30,11 +31,11 @@ function pyramidBuilder(data, target, height, width, style) {
         .text('.axis line,axis path {shape-rendering: crispEdges;fill: transparent;stroke: #555;} \
     .axis text {font-size: 11px;} \
     .bar {fill-opacity: 0.5;} \
-    .bar.left {fill: #' + style.leftBarColor + ';} \
-    .bar.left:hover {fill: #' + colorTransform(style.leftBarColor, '333333') + ';} \
-    .bar.right {fill: #' + style.rightBarColor + ';} \
-    .bar.right:hover {fill: #' + colorTransform(style.rightBarColor, '333333') + ';} \
-    .tooltip {position: absolute;line-height: 1.1em;padding: 7px; margin: 3px;background: #' + style.toolTipBG + ';pointer-events: none;border-radius: 6px;}')
+    .bar.left {fill: ' + style.leftBarColor + ';} \
+    .bar.left:hover {fill: ' + colorTransform(style.leftBarColor, '333333') + ';} \
+    .bar.right {fill: ' + style.rightBarColor + ';} \
+    .bar.right:hover {fill: ' + colorTransform(style.rightBarColor, '333333') + ';} \
+    .tooltip {position: absolute;line-height: 1.1em;padding: 7px; margin: 3px;background: ' + style.tooltipBG + '; color: ' + style.tooltipColor + '; pointer-events: none;border-radius: 6px;}')
 
     var region = d3.select(target).append('svg')
         .attr('width', margin.left + w + margin.right)
@@ -110,7 +111,7 @@ function pyramidBuilder(data, target, height, width, style) {
 
     var yScale = d3.scaleBand()
         .domain(data.map(function(d) {
-            return d.group;
+            return d.age;
         }))
         .range([h, 0], 0.1);
 
@@ -172,7 +173,7 @@ function pyramidBuilder(data, target, height, width, style) {
         .attr('class', 'bar left')
         .attr('x', 0)
         .attr('y', function(d) {
-            return yScale(d.group) + margin.middle / 4;
+            return yScale(d.age) + margin.middle / 4;
         })
         .attr('width', function(d) {
             return xScale(percentage(d.male));
@@ -182,7 +183,7 @@ function pyramidBuilder(data, target, height, width, style) {
             tooltipDiv.transition()
                 .duration(200)
                 .style("opacity", 0.9);
-            tooltipDiv.html("<strong>Males Age " + d.group + "</strong>" +
+            tooltipDiv.html("<strong>Males Age " + d.age + "</strong>" +
                     "<br />  Population: " + prettyFormat(d.male) +
                     "<br />" + (Math.round(percentage(d.male) * 1000) / 10) + "% of Total")
                 .style("left", (d3.event.pageX) + "px")
@@ -200,7 +201,7 @@ function pyramidBuilder(data, target, height, width, style) {
         .attr('class', 'bar right')
         .attr('x', 0)
         .attr('y', function(d) {
-            return yScale(d.group) + margin.middle / 4;
+            return yScale(d.age) + margin.middle / 4;
         })
         .attr('width', function(d) {
             return xScale(percentage(d.female));
@@ -210,7 +211,7 @@ function pyramidBuilder(data, target, height, width, style) {
             tooltipDiv.transition()
                 .duration(200)
                 .style("opacity", 0.9);
-            tooltipDiv.html("<strong> Females Age " + d.group + "</strong>" +
+            tooltipDiv.html("<strong> Females Age " + d.age + "</strong>" +
                     "<br />  Population: " + prettyFormat(d.male) +
                     "<br />" + (Math.round(percentage(d.male) * 1000) / 10) + "% of Total")
                 .style("left", (d3.event.pageX) + "px")
@@ -236,7 +237,8 @@ function pyramidBuilder(data, target, height, width, style) {
 
     // lighten colors
     function colorTransform(c1, c2) {
-        var origHex = {
+        var c1 = c1.replace('#','')
+            origHex = {
                 r: c1.substring(0, 2),
                 g: c1.substring(2, 4),
                 b: c1.substring(4, 6)
@@ -258,7 +260,7 @@ function pyramidBuilder(data, target, height, width, style) {
         newHex.r = transform(origHex.r, transVec.r)
         newHex.g = transform(origHex.g, transVec.g)
         newHex.b = transform(origHex.b, transVec.b)
-        return newHex.r + newHex.g + newHex.b;
+        return '#' + newHex.r + newHex.g + newHex.b;
     }
 
 }
