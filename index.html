@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D3 Population Pyramid</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script>
+    function pyramidBuilder(G,F,v,x,C){var r=typeof x==="undefined"?400:x,B=typeof v==="undefined"?400:v;var u={top:50,right:10,bottom:20,left:10,middle:20},c=r/2-u.middle,i=c,j=r-c;var C={leftBarColor:typeof C.leftBarColor==="undefined"?"#6c9dc6":C.leftBarColor,rightBarColor:typeof C.rightBarColor==="undefined"?"#de5454":C.rightBarColor,tooltipBG:typeof C.tooltipBG==="undefined"?"#fefefe":C.tooltipBG,tooltipColor:typeof C.tooltipColor==="undefined"?"black":C.tooltipColor};var p=d3.sum(G,function(h){return h.male+h.female}),t=function(h){return h/p};var y=d3.select(F).append("style").text(".axis line,axis path {shape-rendering: crispEdges;fill: transparent;stroke: #555;}     .axis text {font-size: 11px;}     .bar {fill-opacity: 0.5;}     .bar.left {fill: "+C.leftBarColor+";}     .bar.left:hover {fill: "+E(C.leftBarColor,"333333")+";}     .bar.right {fill: "+C.rightBarColor+";}     .bar.right:hover {fill: "+E(C.rightBarColor,"333333")+";}     .tooltip {position: absolute;line-height: 1.1em;padding: 7px; margin: 3px;background: "+C.tooltipBG+"; color: "+C.tooltipColor+"; pointer-events: none;border-radius: 6px;}");var g=d3.select(F).append("svg").attr("width",u.left+r+u.right).attr("height",u.bottom+B+u.top);var a=g.append("g").attr("class","legend");a.append("rect").attr("class","bar left").attr("x",(r/2)-(u.middle*3)).attr("y",12).attr("width",12).attr("height",12);a.append("text").attr("fill","#000").attr("x",(r/2)-(u.middle*2)).attr("y",18).attr("dy","0.32em").text("Males");a.append("rect").attr("class","bar right").attr("x",(r/2)+(u.middle*2)).attr("y",12).attr("width",12).attr("height",12);a.append("text").attr("fill","#000").attr("x",(r/2)+(u.middle*3)).attr("y",18).attr("dy","0.32em").text("Females");var m=d3.select("body").append("div").attr("class","tooltip").style("opacity",0);var o=g.append("g").attr("class","inner-region").attr("transform",n(u.left,u.top));var D=Math.max(d3.max(G,function(h){return t(h.male)}),d3.max(G,function(h){return t(h.female)}));var H=d3.scaleLinear().domain([0,D]).range([0,c]).nice();var d=d3.scaleLinear().domain([0,D]).range([c,0]);var q=d3.scaleLinear().domain([0,D]).range([0,c]);var b=d3.scaleBand().domain(G.map(function(h){return h.age})).range([B,0],0.1);var f=d3.axisRight().scale(b).tickSize(4,0).tickPadding(u.middle-4);var e=d3.axisLeft().scale(b).tickSize(4,0).tickFormat("");var A=d3.axisBottom().scale(H).tickFormat(d3.format(".0%"));var z=d3.axisBottom().scale(H.copy().range([i,0])).tickFormat(d3.format(".0%"));var l=o.append("g").attr("transform",n(i,0)+"scale(-1,1)");var k=o.append("g").attr("transform",n(j,0));o.append("g").attr("class","axis y left").attr("transform",n(i,0)).call(f).selectAll("text").style("text-anchor","middle");o.append("g").attr("class","axis y right").attr("transform",n(j,0)).call(e);o.append("g").attr("class","axis x left").attr("transform",n(0,B)).call(z);o.append("g").attr("class","axis x right").attr("transform",n(j,B)).call(A);l.selectAll(".bar.left").data(G).enter().append("rect").attr("class","bar left").attr("x",0).attr("y",function(h){return b(h.age)+u.middle/4}).attr("width",function(h){return H(t(h.male))}).attr("height",(b.range()[0]/G.length)-u.middle/2).on("mouseover",function(h){m.transition().duration(200).style("opacity",0.9);m.html("<strong>Males Age "+h.age+"</strong><br />  Population: "+s(h.male)+"<br />"+(Math.round(t(h.male)*1000)/10)+"% of Total").style("left",(d3.event.pageX)+"px").style("top",(d3.event.pageY-28)+"px")}).on("mouseout",function(h){m.transition().duration(500).style("opacity",0)});k.selectAll(".bar.right").data(G).enter().append("rect").attr("class","bar right").attr("x",0).attr("y",function(h){return b(h.age)+u.middle/4}).attr("width",function(h){return H(t(h.female))}).attr("height",(b.range()[0]/G.length)-u.middle/2).on("mouseover",function(h){m.transition().duration(200).style("opacity",0.9);m.html("<strong> Females Age "+h.age+"</strong><br />  Population: "+s(h.male)+"<br />"+(Math.round(t(h.male)*1000)/10)+"% of Total").style("left",(d3.event.pageX)+"px").style("top",(d3.event.pageY-28)+"px")}).on("mouseout",function(h){m.transition().duration(500).style("opacity",0)});function n(h,w){return"translate("+h+","+w+")"}function s(h){return h.toString().replace(/\B(?=(\d{3})+(?!\d))/g,",")}function E(I,w){var I=I.replace("#","");origHex={r:I.substring(0,2),g:I.substring(2,4),b:I.substring(4,6)},transVec={r:w.substring(0,2),g:w.substring(2,4),b:w.substring(4,6)},newHex={};function h(L,K){var J=parseInt(L,16)+parseInt(K,16);if(J>255){J=255}return J.toString(16)}newHex.r=h(origHex.r,transVec.r);newHex.g=h(origHex.g,transVec.g);newHex.b=h(origHex.b,transVec.b);return"#"+newHex.r+newHex.g+newHex.b}};
+    </script>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+    body {
+      background-color: #f5f5f5;
+    }
+        #topPad {
+            background-color: #252;
+            height: 70px;
+        }
+
+        #navbar.affix {
+            top: 0;
+            width: 100%;
+        }
+
+        #navbar {
+            background-color: #252;
+            z-index: 99999;
+            border: 0;
+        }
+
+        #navbar>.container>.navbar-nav>li>a {
+            color: white;
+        }
+
+        #navbar>.container>.navbar-nav>li>a:hover {
+            color: #aaa;
+        }
+
+        #navbar>.container>.navbar-nav>li.active>a {
+            background-color: #272;
+        }
+
+        #navbar-text {
+            color: white;
+        }
+
+        .affix-top>.container>#navbar-text {
+            margin-top: -15px;
+            font-size: 3em;
+        }
+
+        .affix>.container>#navbar-text {
+            font-size: 1em;
+            -webkit-transition: all 0.2s ease;
+            -moz-transition: all 0.2s ease;
+            -o-transition: all 0.2s ease;
+            -ms-transition: all 0.2s ease;
+        }
+
+        #pyramid {
+            width: 400px;
+            height: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #about {
+            padding-top: 130px;
+        }
+
+        #example,
+        #options {
+            padding-top: 100px;
+        }
+        .bodyContainer {
+          background-color: #fff;
+          border-left: 1px lightgray solid;
+          border-right: 1px lightgray solid;
+          margin-top: -25px;
+        }
+
+        p.foo {
+            margin-top: 350px;
+        }
+
+        .footer {
+            height: 250px;
+        }
+    </style>
+</head>
+
+<body data-spy="scroll" data-target="#navbar">
+    <div id="topPad"></div>
+    <nav id="navbar" class="navbar navbar-default affix-top" data-spy="affix" data-offset-top="70" data-offset-bottom="70">
+        <div class="container">
+            <p id="navbar-text" class="navbar-text">D3 Population Pyramid</p>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#top">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#example">Example</a></li>
+                <li><a href="#options">Options</a></li>
+                <li><a href="https://github.com/doylek/D3-Population-Pyramid">View Repo</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container bodyContainer">
+        <div class="row" id="about">
+            <div class="col-md-8 col-md-offset-2">
+                <h2 class="page-header">Niche js for a niche charting need</h2>
+                <p>
+                    I work with demographic data often, and occasionally find myself needing to create population pyramids as a result. All I've been able to find in the past has been hacks of Google Charts or Plotly or other popular charting libraries. I even tried creating
+                    some of these myself for chart.js! I got sick of trying to hack my way through someone else's work and decided to make my own javascript charting tool from 'scratch' using D3.
+                </p>
+                <p>And that's how D3-Population-Pyramid was born! </p>
+                </col-md-12>
+            </div>
+        </div>
+        <div class="row" id="example">
+            <div class="col-md-8 col-md-offset-2">
+                <h2 class="page-header">Here's what it looks like</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div id="pyramid">
+                </div>
+                <script>
+                    // data must be in a format with age, male, and female in each object
+                    var exampleData = [{
+                        age: "0-9",
+                        male: 10,
+                        female: 12
+                    }, {
+                        age: "10-19",
+                        male: 14,
+                        female: 15
+                    }, {
+                        age: "20-29",
+                        male: 15,
+                        female: 18
+                    }, {
+                        age: "30-39",
+                        male: 18,
+                        female: 18
+                    }, {
+                        age: "40-49",
+                        male: 21,
+                        female: 22
+                    }, {
+                        age: "50-59",
+                        male: 19,
+                        female: 24
+                    }, {
+                        age: "60-69",
+                        male: 15,
+                        female: 14
+                    }, {
+                        age: "70-79",
+                        male: 8,
+                        female: 10
+                    }, {
+                        age: "80-89",
+                        male: 4,
+                        female: 5
+                    }, {
+                        age: "90+",
+                        male: 2,
+                        female: 3
+                    }];
+
+                    pyramidBuilder(exampleData, '#pyramid', 400, 500, {
+                        leftBarColor: "#229922",
+                        rightBarColor: "#992222"
+                    });
+                </script>
+            </div>
+        </div>
+        <div class="row" id="options">
+            <div class="col-md-8 col-md-offset-2">
+                <h2 class="page-header"> Here's how you control its awesome power
+          </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+              <table class="table table-striped table-hover"><thead>
+              <tr>
+              <th>Name</th>
+              <th>Type</th>
+              <th>Default</th>
+              <th>Optional</th>
+              <th>Notes</th>
+              </tr>
+              </thead><tbody>
+              <tr>
+              <td>data</td>
+              <td>JSON</td>
+              <td>N/A</td>
+              <td>N</td>
+              <td>Needs age, male, and female properties. <br> Example: [{ age: '0-50', male: 4500, female: 4500 }, { age: '51-99+',male: 5000, female: 5000 }]</td>
+              </tr>
+              <tr>
+              <td>target</td>
+              <td>string</td>
+              <td>N/A</td>
+              <td>N</td>
+              <td>Uses D3's select() function. Examples: '#pyramid', 'body'</td>
+              </tr>
+              <tr>
+              <td>height</td>
+              <td>numeric</td>
+              <td>400</td>
+              <td>Y</td>
+              <td></td>
+              </tr>
+              <tr>
+              <td>width</td>
+              <td>numeric</td>
+              <td>400</td>
+              <td>Y</td>
+              <td></td>
+              </tr>
+              <tr>
+              <td>style</td>
+              <td>JSON</td>
+              <td>see below</td>
+              <td>Y</td>
+              <td>Example: {leftBarColor: '#00ffaa', rightBarColor: '#ffaa00', tooltipBG: '#333', tooltipColor: 'white'}</td>
+              </tr>
+              <tr>
+              <td>style.leftBarColor</td>
+              <td>string (hex)</td>
+              <td>'#6c9dc6'</td>
+              <td>Y</td>
+              <td>Input color will be automatically lightened for :hover css</td>
+              </tr>
+              <tr>
+              <td>style.rightBarColor</td>
+              <td>string (hex)</td>
+              <td>'#de5454'</td>
+              <td>Y</td>
+              <td>Input color will be automatically lightened for :hover css</td>
+              </tr>
+              <tr>
+              <td>style.tooltipBG</td>
+              <td>string (hex)</td>
+              <td>'#fefefe'</td>
+              <td>Y</td>
+              <td>Uses CSS background property, so you could use more than just a color value.</td>
+              </tr>
+              <tr>
+              <td>style.tooltipColor</td>
+              <td>string (hex)</td>
+              <td>'black'</td>
+              <td>Y</td>
+              <td>Controls CSS color property for tooltip</td>
+              </tr>
+              </tbody></table>
+            </div>
+        </div>
+        <div class="row">
+          <div class="col-md-8 col-md-offset-2">
+            <h2 class="page-header">Like what you see?</h2>
+            <p><a href="https://github.com/doylek/D3-Population-Pyramid">Download the repo from github and chart away!</a></p>
+          </div>
+        </div>
+<div class="footer"></div>
+    </div>
+</body>
+
+</html>
