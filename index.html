@@ -83,6 +83,12 @@
           border-right: 1px lightgray solid;
           margin-top: -25px;
         }
+        #gitDiv {
+          margin-left: 15px;
+          margin-right: 15px;
+          color: white;
+          margin-top: 15px;
+        }
 
         p.foo {
             margin-top: 350px;
@@ -104,6 +110,7 @@
                 <li><a href="#about">About</a></li>
                 <li><a href="#example">Example</a></li>
                 <li><a href="#options">Options</a></li>
+                <li id="gitDiv">&bull;</li>
                 <li><a href="https://github.com/doylek/D3-Population-Pyramid">View Repo</a></li>
             </ul>
         </div>
@@ -117,6 +124,29 @@
                     some of these myself for chart.js! I got sick of trying to hack my way through someone else's work and decided to make my own javascript charting tool from 'scratch' using D3.
                 </p>
                 <p>And that's how D3-Population-Pyramid was born! </p>
+                <p>To use it, you'll need only popPyramid.min.js and D3 for your own implementation. The easiest use is to include this in your header:
+                </p>
+                <p>
+                <code>
+                &lt;script src="popPyramid.min.js"&gt;&lt;/script&gt;
+                </code>
+                </p>
+                <p>And include something like this in your body:</p>
+                <p>
+                <code>
+                &lt;script&gt;<br />
+                  // data must be in a format with age, male, and female in each object <br />
+                  var exampleData = [{ age: '0-9', male: 10, female: 12 }, { age: '10-19',
+                  male: 14, female: 15 }, { age: '20-29', male: 15, female: 18 },
+                  { age: '30-39', male: 18, female: 18 }, { age: '40-49', male: 21, female: 22 },
+                    {age: '50-59', male: 19, female: 24 }, { age: '60-69', male: 15, female: 14 },
+                    {age: '70-79', male: 8, female: 10 }, { age: '80-89', male: 4, female: 5 },
+                        {age: '90+', male: 2, female: 3 }]; <br /> <br />
+
+                  pyramidBuilder(exampleData, '#pyramid', 400, 500);<br />
+                &lt;/script&gt;
+                </code>
+                </p>
                 </col-md-12>
             </div>
         </div>
