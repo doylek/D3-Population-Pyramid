@@ -16,7 +16,7 @@ function pyramidBuilder(data, target, height, width, style) {
             left: 10,
             middle: 20
         },
-        w = (w - (margin.middle*2) ),
+        w = (w - ((margin.middle*2)+margin.right) ),
         h = (h - (margin.top + margin.bottom)),
         sectorWidth = w / 2 - margin.middle,
         leftBegin = sectorWidth,
