@@ -1,7 +1,6 @@
-function pyramidBuilder(data, target, height, width, style) {
-
-    var w = typeof width === 'undefined' ? 400  : width,
-        h = typeof height === 'undefined' ? 400  : height,
+function pyramidBuilder(data, target, options) {
+    var w = typeof options.width === 'undefined' ? 400  : options.width,
+        h = typeof options.height === 'undefined' ? 400  : options.height,
         w_full = w,
         h_full = h;
 
@@ -22,12 +21,21 @@ function pyramidBuilder(data, target, height, width, style) {
         leftBegin = sectorWidth,
         rightBegin = w - sectorWidth;
 
-    var style = {
-        leftBarColor: typeof style.leftBarColor === 'undefined' ? '#6c9dc6' : style.leftBarColor,
-        rightBarColor: typeof style.rightBarColor === 'undefined' ? '#de5454' : style.rightBarColor,
-        tooltipBG: typeof style.tooltipBG === 'undefined' ? '#fefefe' : style.tooltipBG,
-        tooltipColor: typeof style.tooltipColor === 'undefined' ? 'black' : style.tooltipColor
+    if (typeof options.style === 'undefined') {
+      var style = {
+        leftBarColor: '#6c9dc6',
+        rightBarColor: '#de5454',
+        tooltipBG: '#fefefe',
+        tooltipColor: 'black'
+      }
+    } else {
+      var style = {
+        leftBarColor: typeof options.style.leftBarColor === 'undefined'  ? '#6c9dc6' : options.style.leftBarColor,
+        rightBarColor: typeof options.style.rightBarColor === 'undefined' ? '#de5454' : options.style.rightBarColor,
+        tooltipBG: typeof options.style.tooltipBG === 'undefined' ? '#fefefe' : options.style.tooltipBG,
+        tooltipColor: typeof options.style.tooltipColor === 'undefined' ? 'black' : options.style.tooltipColor
     }
+  }
 
     var totalPopulation = d3.sum(data, function(d) {
             return d.male + d.female;

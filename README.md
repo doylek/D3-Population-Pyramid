@@ -15,7 +15,7 @@ And include something like this in your body:
         age: '70-79', male: 8, female: 10 }, { age: '80-89', male: 4, female: 5 }, {
           age: '90+', male: 2, female: 3 }];
 
-  pyramidBuilder(exampleData, '#pyramid', 400, 500);
+  pyramidBuilder(exampleData, '#pyramid', {height: 400, width: 500});
 </script>
   ```
 
@@ -31,10 +31,11 @@ The chart (with default css) looks something like this:
 |------|------|--------|----------|----------|
 | data | JSON | N/A | N           | Needs age, male, and female properties. <br /> Example: [{ age: '0-50', male: 4500, female: 4500 }, { age: '51-99+',male: 5000, female: 5000 }]|
 | target | string | N/A | N       | Uses D3's select() function. Examples: '#pyramid', 'body' |
-| height | numeric | 400 | Y      |          |
-| width |  numeric  | 400 | Y     |           |
-| style | JSON    | see below | Y | Example: {leftBarColor: '#00ffaa', rightBarColor: '#ffaa00', tooltipBG: '#333', tooltipColor: 'white'} |
-| style.leftBarColor | string (hex) | '#6c9dc6' | Y | Input color will be automatically lightened for :hover css |
-| style.rightBarColor | string (hex) | '#de5454' | Y  | Input color will be automatically lightened for :hover css|
-| style.tooltipBG |   string (hex) | '#fefefe' | Y  | Uses CSS background property, so you could use more than just a color value. |
-| style.tooltipColor |   string (hex) | 'black' | Y  |  Controls CSS color property for tooltip  |
+| options | JSON | see below | N | If you want all defaults, you'll need to go with {} for this var |
+| options.height | numeric | 400 | Y      |          |
+| options.width |  numeric  | 400 | Y     |           |
+| options.style | JSON    | see below | Y | Example: {leftBarColor: '#00ffaa', rightBarColor: '#ffaa00', tooltipBG: '#333', tooltipColor: 'white'} |
+| options.style.leftBarColor | string (hex) | '#6c9dc6' | Y | Input color will be automatically lightened for :hover css |
+| options.style.rightBarColor | string (hex) | '#de5454' | Y  | Input color will be automatically lightened for :hover css|
+| options.style.tooltipBG |   string (hex) | '#fefefe' | Y  | Uses CSS background property, so you could use more than just a color value. |
+| options.style.tooltipColor |   string (hex) | 'black' | Y  |  Controls CSS color property for tooltip  |
