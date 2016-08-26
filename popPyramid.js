@@ -1,7 +1,14 @@
 function pyramidBuilder(data, target, height, width, style) {
 
     var w = typeof width === 'undefined' ? 400  : width,
-        h = typeof height === 'undefined' ? 400  : height;
+        h = typeof height === 'undefined' ? 400  : height,
+        w_full = w,
+        h_full = h;
+
+    if (w > $( window ).width()) {
+      w = $( window ).width();
+    }
+
     var margin = {
             top: 50,
             right: 10,
@@ -9,6 +16,8 @@ function pyramidBuilder(data, target, height, width, style) {
             left: 10,
             middle: 20
         },
+        w = (w - (margin.right + margin.left + margin.middle*2) ),
+        h = (h - (margin.top + margin.bottom)),
         sectorWidth = w / 2 - margin.middle,
         leftBegin = sectorWidth,
         rightBegin = w - sectorWidth;
@@ -28,7 +37,8 @@ function pyramidBuilder(data, target, height, width, style) {
         };
 
     var styleSection = d3.select(target).append('style')
-        .text('.axis line,axis path {shape-rendering: crispEdges;fill: transparent;stroke: #555;} \
+        .text('svg {max-width:100%} \
+    .axis line,axis path {shape-rendering: crispEdges;fill: transparent;stroke: #555;} \
     .axis text {font-size: 11px;} \
     .bar {fill-opacity: 0.5;} \
     .bar.left {fill: ' + style.leftBarColor + ';} \
@@ -38,8 +48,8 @@ function pyramidBuilder(data, target, height, width, style) {
     .tooltip {position: absolute;line-height: 1.1em;padding: 7px; margin: 3px;background: ' + style.tooltipBG + '; color: ' + style.tooltipColor + '; pointer-events: none;border-radius: 6px;}')
 
     var region = d3.select(target).append('svg')
-        .attr('width', margin.left + w + margin.right)
-        .attr('height', margin.bottom + h + margin.top);
+        .attr('width', w_full)
+        .attr('height', h_full);
 
 
     var legend = region.append('g')

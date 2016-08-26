@@ -10,63 +10,36 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script>
-    function pyramidBuilder(G,F,v,x,C){var r=typeof x==="undefined"?400:x,B=typeof v==="undefined"?400:v;var u={top:50,right:10,bottom:20,left:10,middle:20},c=r/2-u.middle,i=c,j=r-c;var C={leftBarColor:typeof C.leftBarColor==="undefined"?"#6c9dc6":C.leftBarColor,rightBarColor:typeof C.rightBarColor==="undefined"?"#de5454":C.rightBarColor,tooltipBG:typeof C.tooltipBG==="undefined"?"#fefefe":C.tooltipBG,tooltipColor:typeof C.tooltipColor==="undefined"?"black":C.tooltipColor};var p=d3.sum(G,function(h){return h.male+h.female}),t=function(h){return h/p};var y=d3.select(F).append("style").text(".axis line,axis path {shape-rendering: crispEdges;fill: transparent;stroke: #555;}     .axis text {font-size: 11px;}     .bar {fill-opacity: 0.5;}     .bar.left {fill: "+C.leftBarColor+";}     .bar.left:hover {fill: "+E(C.leftBarColor,"333333")+";}     .bar.right {fill: "+C.rightBarColor+";}     .bar.right:hover {fill: "+E(C.rightBarColor,"333333")+";}     .tooltip {position: absolute;line-height: 1.1em;padding: 7px; margin: 3px;background: "+C.tooltipBG+"; color: "+C.tooltipColor+"; pointer-events: none;border-radius: 6px;}");var g=d3.select(F).append("svg").attr("width",u.left+r+u.right).attr("height",u.bottom+B+u.top);var a=g.append("g").attr("class","legend");a.append("rect").attr("class","bar left").attr("x",(r/2)-(u.middle*3)).attr("y",12).attr("width",12).attr("height",12);a.append("text").attr("fill","#000").attr("x",(r/2)-(u.middle*2)).attr("y",18).attr("dy","0.32em").text("Males");a.append("rect").attr("class","bar right").attr("x",(r/2)+(u.middle*2)).attr("y",12).attr("width",12).attr("height",12);a.append("text").attr("fill","#000").attr("x",(r/2)+(u.middle*3)).attr("y",18).attr("dy","0.32em").text("Females");var m=d3.select("body").append("div").attr("class","tooltip").style("opacity",0);var o=g.append("g").attr("class","inner-region").attr("transform",n(u.left,u.top));var D=Math.max(d3.max(G,function(h){return t(h.male)}),d3.max(G,function(h){return t(h.female)}));var H=d3.scaleLinear().domain([0,D]).range([0,c]).nice();var d=d3.scaleLinear().domain([0,D]).range([c,0]);var q=d3.scaleLinear().domain([0,D]).range([0,c]);var b=d3.scaleBand().domain(G.map(function(h){return h.age})).range([B,0],0.1);var f=d3.axisRight().scale(b).tickSize(4,0).tickPadding(u.middle-4);var e=d3.axisLeft().scale(b).tickSize(4,0).tickFormat("");var A=d3.axisBottom().scale(H).tickFormat(d3.format(".0%"));var z=d3.axisBottom().scale(H.copy().range([i,0])).tickFormat(d3.format(".0%"));var l=o.append("g").attr("transform",n(i,0)+"scale(-1,1)");var k=o.append("g").attr("transform",n(j,0));o.append("g").attr("class","axis y left").attr("transform",n(i,0)).call(f).selectAll("text").style("text-anchor","middle");o.append("g").attr("class","axis y right").attr("transform",n(j,0)).call(e);o.append("g").attr("class","axis x left").attr("transform",n(0,B)).call(z);o.append("g").attr("class","axis x right").attr("transform",n(j,B)).call(A);l.selectAll(".bar.left").data(G).enter().append("rect").attr("class","bar left").attr("x",0).attr("y",function(h){return b(h.age)+u.middle/4}).attr("width",function(h){return H(t(h.male))}).attr("height",(b.range()[0]/G.length)-u.middle/2).on("mouseover",function(h){m.transition().duration(200).style("opacity",0.9);m.html("<strong>Males Age "+h.age+"</strong><br />  Population: "+s(h.male)+"<br />"+(Math.round(t(h.male)*1000)/10)+"% of Total").style("left",(d3.event.pageX)+"px").style("top",(d3.event.pageY-28)+"px")}).on("mouseout",function(h){m.transition().duration(500).style("opacity",0)});k.selectAll(".bar.right").data(G).enter().append("rect").attr("class","bar right").attr("x",0).attr("y",function(h){return b(h.age)+u.middle/4}).attr("width",function(h){return H(t(h.female))}).attr("height",(b.range()[0]/G.length)-u.middle/2).on("mouseover",function(h){m.transition().duration(200).style("opacity",0.9);m.html("<strong> Females Age "+h.age+"</strong><br />  Population: "+s(h.male)+"<br />"+(Math.round(t(h.male)*1000)/10)+"% of Total").style("left",(d3.event.pageX)+"px").style("top",(d3.event.pageY-28)+"px")}).on("mouseout",function(h){m.transition().duration(500).style("opacity",0)});function n(h,w){return"translate("+h+","+w+")"}function s(h){return h.toString().replace(/\B(?=(\d{3})+(?!\d))/g,",")}function E(I,w){var I=I.replace("#","");origHex={r:I.substring(0,2),g:I.substring(2,4),b:I.substring(4,6)},transVec={r:w.substring(0,2),g:w.substring(2,4),b:w.substring(4,6)},newHex={};function h(L,K){var J=parseInt(L,16)+parseInt(K,16);if(J>255){J=255}return J.toString(16)}newHex.r=h(origHex.r,transVec.r);newHex.g=h(origHex.g,transVec.g);newHex.b=h(origHex.b,transVec.b);return"#"+newHex.r+newHex.g+newHex.b}};
+    function pyramidBuilder(I,H,v,y,E){var r=typeof y==="undefined"?400:y,D=typeof v==="undefined"?400:v,x=r,B=D;if(r>$(window).width()){r=$(window).width()}var u={top:50,right:10,bottom:20,left:10,middle:20},r=(r-(u.right+u.left+u.middle*2)),D=(D-(u.top+u.bottom)),c=r/2-u.middle,i=c,j=r-c;var E={leftBarColor:typeof E.leftBarColor==="undefined"?"#6c9dc6":E.leftBarColor,rightBarColor:typeof E.rightBarColor==="undefined"?"#de5454":E.rightBarColor,tooltipBG:typeof E.tooltipBG==="undefined"?"#fefefe":E.tooltipBG,tooltipColor:typeof E.tooltipColor==="undefined"?"black":E.tooltipColor};var p=d3.sum(I,function(h){return h.male+h.female}),t=function(h){return h/p};var z=d3.select(H).append("style").text("svg {max-width:100%}     .axis line,axis path {shape-rendering: crispEdges;fill: transparent;stroke: #555;}     .axis text {font-size: 11px;}     .bar {fill-opacity: 0.5;}     .bar.left {fill: "+E.leftBarColor+";}     .bar.left:hover {fill: "+G(E.leftBarColor,"333333")+";}     .bar.right {fill: "+E.rightBarColor+";}     .bar.right:hover {fill: "+G(E.rightBarColor,"333333")+";}     .tooltip {position: absolute;line-height: 1.1em;padding: 7px; margin: 3px;background: "+E.tooltipBG+"; color: "+E.tooltipColor+"; pointer-events: none;border-radius: 6px;}");var g=d3.select(H).append("svg").attr("width",x).attr("height",B);var a=g.append("g").attr("class","legend");a.append("rect").attr("class","bar left").attr("x",(r/2)-(u.middle*3)).attr("y",12).attr("width",12).attr("height",12);a.append("text").attr("fill","#000").attr("x",(r/2)-(u.middle*2)).attr("y",18).attr("dy","0.32em").text("Males");a.append("rect").attr("class","bar right").attr("x",(r/2)+(u.middle*2)).attr("y",12).attr("width",12).attr("height",12);a.append("text").attr("fill","#000").attr("x",(r/2)+(u.middle*3)).attr("y",18).attr("dy","0.32em").text("Females");var m=d3.select("body").append("div").attr("class","tooltip").style("opacity",0);var o=g.append("g").attr("class","inner-region").attr("transform",n(u.left,u.top));var F=Math.max(d3.max(I,function(h){return t(h.male)}),d3.max(I,function(h){return t(h.female)}));var J=d3.scaleLinear().domain([0,F]).range([0,c]).nice();var d=d3.scaleLinear().domain([0,F]).range([c,0]);var q=d3.scaleLinear().domain([0,F]).range([0,c]);var b=d3.scaleBand().domain(I.map(function(h){return h.age})).range([D,0],0.1);var f=d3.axisRight().scale(b).tickSize(4,0).tickPadding(u.middle-4);var e=d3.axisLeft().scale(b).tickSize(4,0).tickFormat("");var C=d3.axisBottom().scale(J).tickFormat(d3.format(".0%"));var A=d3.axisBottom().scale(J.copy().range([i,0])).tickFormat(d3.format(".0%"));var l=o.append("g").attr("transform",n(i,0)+"scale(-1,1)");var k=o.append("g").attr("transform",n(j,0));o.append("g").attr("class","axis y left").attr("transform",n(i,0)).call(f).selectAll("text").style("text-anchor","middle");o.append("g").attr("class","axis y right").attr("transform",n(j,0)).call(e);o.append("g").attr("class","axis x left").attr("transform",n(0,D)).call(A);o.append("g").attr("class","axis x right").attr("transform",n(j,D)).call(C);l.selectAll(".bar.left").data(I).enter().append("rect").attr("class","bar left").attr("x",0).attr("y",function(h){return b(h.age)+u.middle/4}).attr("width",function(h){return J(t(h.male))}).attr("height",(b.range()[0]/I.length)-u.middle/2).on("mouseover",function(h){m.transition().duration(200).style("opacity",0.9);m.html("<strong>Males Age "+h.age+"</strong><br />  Population: "+s(h.male)+"<br />"+(Math.round(t(h.male)*1000)/10)+"% of Total").style("left",(d3.event.pageX)+"px").style("top",(d3.event.pageY-28)+"px")}).on("mouseout",function(h){m.transition().duration(500).style("opacity",0)});k.selectAll(".bar.right").data(I).enter().append("rect").attr("class","bar right").attr("x",0).attr("y",function(h){return b(h.age)+u.middle/4}).attr("width",function(h){return J(t(h.female))}).attr("height",(b.range()[0]/I.length)-u.middle/2).on("mouseover",function(h){m.transition().duration(200).style("opacity",0.9);m.html("<strong> Females Age "+h.age+"</strong><br />  Population: "+s(h.male)+"<br />"+(Math.round(t(h.male)*1000)/10)+"% of Total").style("left",(d3.event.pageX)+"px").style("top",(d3.event.pageY-28)+"px")}).on("mouseout",function(h){m.transition().duration(500).style("opacity",0)});function n(h,w){return"translate("+h+","+w+")"}function s(h){return h.toString().replace(/\B(?=(\d{3})+(?!\d))/g,",")}function G(K,w){var K=K.replace("#","");origHex={r:K.substring(0,2),g:K.substring(2,4),b:K.substring(4,6)},transVec={r:w.substring(0,2),g:w.substring(2,4),b:w.substring(4,6)},newHex={};function h(N,M){var L=parseInt(N,16)+parseInt(M,16);if(L>255){L=255}return L.toString(16)}newHex.r=h(origHex.r,transVec.r);newHex.g=h(origHex.g,transVec.g);newHex.b=h(origHex.b,transVec.b);return"#"+newHex.r+newHex.g+newHex.b}};
     </script>
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <style>
     body {
       background-color: #f5f5f5;
     }
-        #topPad {
-            background-color: #252;
-            height: 70px;
-        }
-
-        #navbar.affix {
-            top: 0;
-            width: 100%;
-        }
-
-        #navbar {
-            background-color: #252;
-            z-index: 99999;
-            border: 0;
-        }
-
-        #navbar>.container>.navbar-nav>li>a {
-            color: white;
-        }
-
-        #navbar>.container>.navbar-nav>li>a:hover {
-            color: #aaa;
-        }
-
-        #navbar>.container>.navbar-nav>li.active>a {
-            background-color: #272;
-        }
-
-        #navbar-text {
-            color: white;
-        }
-
-        .affix-top>.container>#navbar-text {
-            margin-top: -15px;
-            font-size: 3em;
-        }
-
-        .affix>.container>#navbar-text {
-            font-size: 1em;
-            -webkit-transition: all 0.2s ease;
-            -moz-transition: all 0.2s ease;
-            -o-transition: all 0.2s ease;
-            -ms-transition: all 0.2s ease;
-        }
-
+    .navbar-green {
+      background-color: #252;
+      color: white;
+      border: none;
+    }
+    .navbar-green .navbar-toggle .icon-bar {
+      background-color: white;
+    }
+    .navbar-green a {
+      color: white;
+    }
+    .navbar-green a:hover, .navbar-green a:active {
+      background-color: #474 !important;
+    }
+    #brand:hover {
+      background-color: #252 !important;
+    }
         #pyramid {
             width: 400px;
             height: 500px;
             margin-left: auto;
             margin-right: auto;
+            max-width: 100%;
         }
 
         #about {
@@ -83,38 +56,43 @@
           border-right: 1px lightgray solid;
           margin-top: -25px;
         }
-        #gitDiv {
-          margin-left: 15px;
-          margin-right: 15px;
-          color: white;
-          margin-top: 15px;
-        }
 
+        /* filler stuff */
         p.foo {
             margin-top: 350px;
         }
-
         .footer {
             height: 250px;
         }
-    </style>
+</style>
 </head>
 
 <body data-spy="scroll" data-target="#navbar">
-    <div id="topPad"></div>
-    <nav id="navbar" class="navbar navbar-default affix-top" data-spy="affix" data-offset-top="70" data-offset-bottom="70">
+  <nav class="navbar navbar-green navbar-fixed-top">
         <div class="container">
-            <p id="navbar-text" class="navbar-text">D3 Population Pyramid</p>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#top">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#example">Example</a></li>
-                <li><a href="#options">Options</a></li>
-                <li id="gitDiv">&bull;</li>
-                <li><a href="https://github.com/doylek/D3-Population-Pyramid">View Repo</a></li>
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" id="brand" href="#">D3-Population-Pyramid</a>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li><a href="#about">About</a></li>
+              <li><a href="#example">Example</a></li>
+              <li><a href="#options">Options</a></li>
             </ul>
+            <ul class="nav navbar-nav navbar-right">
+            <li><a href="https://github.com/doylek/D3-Population-Pyramid">View Files on GitHub</a></li>
+          </ul>
+          </div><!--/.nav-collapse -->
         </div>
-    </nav>
+      </nav>
+
+
     <div class="container bodyContainer">
         <div class="row" id="about">
             <div class="col-md-8 col-md-offset-2">
@@ -217,6 +195,7 @@
         </div>
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
+              <div class="table-responsive">
               <table class="table table-striped table-hover"><thead>
               <tr>
               <th>Name</th>
@@ -289,7 +268,7 @@
               <td>Y</td>
               <td>Controls CSS color property for tooltip</td>
               </tr>
-              </tbody></table>
+              </tbody></table></div>
             </div>
         </div>
         <div class="row">
