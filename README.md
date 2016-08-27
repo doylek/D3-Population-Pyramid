@@ -27,6 +27,8 @@ The chart (with default css) looks something like this:
 
 # Options
 
+The function is in the format  `pyramidBuilder(data, target, options)`
+
 | Name | Type | Default| Optional |   Notes  |
 |------|------|--------|----------|----------|
 | data | JSON | N/A | N           | Needs age, male, and female properties. <br /> Example: [{ age: '0-50', male: 4500, female: 4500 }, { age: '51-99+',male: 5000, female: 5000 }]|
