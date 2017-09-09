@@ -15,11 +15,12 @@ function pyramidBuilder(data, target, options) {
             left: 10,
             middle: 20
         },
-        w = (w - ((margin.middle*2)+margin.right) ),
-        h = (h - (margin.top + margin.bottom)),
-        sectorWidth = w / 2 - margin.middle,
-        leftBegin = sectorWidth,
-        rightBegin = w - sectorWidth;
+        sectorWidth = (w / 2) - margin.middle,
+        leftBegin = sectorWidth - margin.left,
+        rightBegin = w - margin.right - sectorWidth;
+
+    w = (w- (margin.left + margin.right) );
+    h = (h - (margin.top + margin.bottom));
 
     if (typeof options.style === 'undefined') {
       var style = {
@@ -27,14 +28,14 @@ function pyramidBuilder(data, target, options) {
         rightBarColor: '#de5454',
         tooltipBG: '#fefefe',
         tooltipColor: 'black'
-      }
+      };
     } else {
       var style = {
         leftBarColor: typeof options.style.leftBarColor === 'undefined'  ? '#6c9dc6' : options.style.leftBarColor,
         rightBarColor: typeof options.style.rightBarColor === 'undefined' ? '#de5454' : options.style.rightBarColor,
         tooltipBG: typeof options.style.tooltipBG === 'undefined' ? '#fefefe' : options.style.tooltipBG,
         tooltipColor: typeof options.style.tooltipColor === 'undefined' ? 'black' : options.style.tooltipColor
-    }
+    };
   }
 
     var totalPopulation = d3.sum(data, function(d) {
@@ -45,7 +46,7 @@ function pyramidBuilder(data, target, options) {
         };
 
     var styleSection = d3.select(target).append('style')
-        .text('svg {max-width:100%} \
+    .text('svg {max-width:100%} \
     .axis line,axis path {shape-rendering: crispEdges;fill: transparent;stroke: #555;} \
     .axis text {font-size: 11px;} \
     .bar {fill-opacity: 0.5;} \
@@ -63,6 +64,7 @@ function pyramidBuilder(data, target, options) {
     var legend = region.append('g')
         .attr('class', 'legend');
 
+        // TODO: fix these margin calculations -- consider margin.middle == 0 -- what calculations for padding would be necessary?
     legend.append('rect')
         .attr('class', 'bar left')
         .attr('x', (w / 2) - (margin.middle * 3))
@@ -100,15 +102,16 @@ function pyramidBuilder(data, target, options) {
         .attr('transform', translation(margin.left, margin.top));
 
     // find the maximum data value for whole dataset
+    // and rounds up to nearest 5%
     //  since this will be shared by both of the x-axes
-    var maxValue = Math.max(
+    var maxValue = Math.ceil(Math.max(
         d3.max(data, function(d) {
             return percentage(d.male);
         }),
         d3.max(data, function(d) {
             return percentage(d.female);
         })
-    );
+    )/0.05)*0.05;
 
     // SET UP SCALES
 
@@ -116,7 +119,7 @@ function pyramidBuilder(data, target, options) {
     //  it will be reversed for the left x-axis
     var xScale = d3.scaleLinear()
         .domain([0, maxValue])
-        .range([0, sectorWidth])
+        .range([0, (sectorWidth-margin.middle)])
         .nice();
 
     var xScaleLeft = d3.scaleLinear()
@@ -230,8 +233,8 @@ function pyramidBuilder(data, target, options) {
                 .duration(200)
                 .style("opacity", 0.9);
             tooltipDiv.html("<strong> Females Age " + d.age + "</strong>" +
-                    "<br />  Population: " + prettyFormat(d.male) +
-                    "<br />" + (Math.round(percentage(d.male) * 1000) / 10) + "% of Total")
+                    "<br />  Population: " + prettyFormat(d.female) +
+                    "<br />" + (Math.round(percentage(d.female) * 1000) / 10) + "% of Total")
                 .style("left", (d3.event.pageX) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");
         })
@@ -271,13 +274,13 @@ function pyramidBuilder(data, target, options) {
         function transform(d, e) {
             var f = parseInt(d, 16) + parseInt(e, 16);
             if (f > 255) {
-                f = 255
+                f = 255;
             }
-            return f.toString(16)
+            return f.toString(16);
         }
-        newHex.r = transform(origHex.r, transVec.r)
-        newHex.g = transform(origHex.g, transVec.g)
-        newHex.b = transform(origHex.b, transVec.b)
+        newHex.r = transform(origHex.r, transVec.r);
+        newHex.g = transform(origHex.g, transVec.g);
+        newHex.b = transform(origHex.b, transVec.b);
         return '#' + newHex.r + newHex.g + newHex.b;
     }
 
